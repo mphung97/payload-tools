@@ -3,8 +3,9 @@
 import * as React from 'react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
+import { useTranslation } from '@payloadcms/ui';
+import { rtlLanguages } from '@payloadcms/translations';
 
-import { he } from 'date-fns/locale';
 import { format } from 'date-fns';
 
 import { cn } from '../lib/utils';
@@ -23,11 +24,16 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 }) {
   const defaultClassNames = getDefaultClassNames();
-
+  const { i18n } = useTranslation();
+  const localeLang = i18n.language;
+  const isRTL = (rtlLanguages as readonly string[]).includes(localeLang);
+  const direction = isRTL ? 'rtl': 'ltr';
+  const locale = { code: localeLang, direction } as Locale;
+  
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      locale={he}
+      locale={locale}
       className={cn(
         'bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
